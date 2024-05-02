@@ -39,5 +39,5 @@ class StableDiffusionGenerator:
             num_inference_steps=40,
             denoising_start=0.80,
         ).images[0]
-        generation.save(f"./images/{name}.png")
+        generation.save(f"./example/images/{name}.png")
         return generation
