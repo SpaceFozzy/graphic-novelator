@@ -1,54 +1,100 @@
 import os
-from langchain.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
-from langchain_core.output_parsers import StrOutputParser
+import sys
+from llama.llama import LLama3Generator
+from stable_diffusion.stable_diffusion import StableDiffusionGenerator
 
 def chunk_text(text, chunk_size=500):
+    """
+    Yields chunks of text of approximately `chunk_size` words.
+    """
     words = text.split()
     for i in range(0, len(words), chunk_size):
-        yield " ".join(words[i: i + chunk_size])
+        yield " ".join(words[i:i + chunk_size])
 
 class GraphicNovel:
-    def __init__(self):
-        self.validate_env_vars()
+    def __init__(self, filename):
+        self.filename = filename
+        self.scene_directory = "./scenes"
+        self.image_directory = "./images"
+        os.makedirs(self.scene_directory, exist_ok=True)
+        os.makedirs(self.image_directory, exist_ok=True)
 
-    @staticmethod
-    def validate_env_vars():
-        if not os.environ.get("OPENAI_API_KEY"):
-            raise EnvironmentError("OPENAI_API_KEY environment variable not set.")
-
-    def read_file(self, filename):
-        with open(filename, "r", encoding="utf-8") as file:
+    def read_file(self):
+        """
+        Reads and returns the content of the file specified by `self.filename`.
+        """
+        with open(self.filename, "r", encoding="utf-8") as file:
             return file.read()
 
-    def write_scene(self, output_stream, scene_number):
-        scene_directory = "./scenes"
-        os.makedirs(scene_directory, exist_ok=True)  # Ensure the directory exists
-        filename = f"{scene_directory}/{scene_number}.txt"
-        with open(filename, "w") as file:
-            for output in output_stream:
-                file.write(output)
-        print(f"Chunk {scene_number} scene analysis complete.")
+    def write_scene(self, description, scene_number, overwrite):
+        """
+        Writes a scene description to a file corresponding to `scene_number`.
+        """
+        scene_path = os.path.join(self.scene_directory, f"{scene_number}.txt")
+        if overwrite or not os.path.exists(scene_path):
+            with open(scene_path, "w", encoding="utf-8") as file:
+                file.write(description)
+            print(f"Scene {scene_number} analysis complete and written to {scene_path}.")
 
-    def build(self):
-        text = self.read_file("text.txt")
+    def generate_image(self, description, scene_number, overwrite):
+        """
+        Generates an image based on the description, and ensures no overwriting of existing images unless specified.
+        """
+        image_path = os.path.join(self.image_directory, f"{scene_number}.png")
+        if overwrite or not os.path.exists(image_path):
+            self.image_generator.generate_image(description, scene_number)
+            print(f"Image for scene {scene_number} created at {image_path}.")
+
+    def build(self, specific_chunk=None):
+        """
+        Builds the graphic novel by generating descriptions and images for each text chunk.
+        Skips generation if both scene description and image files exist unless overwriting is specified.
+        """
+        text = self.read_file()
+        generator = LLama3Generator()
+
+        # Check if files exist and determine if generation is needed
+        descriptions = []
         for i, chunk in enumerate(chunk_text(text)):
-            scene_query_prompt = ChatPromptTemplate.from_template(
-                """
-                Identify and describe the details of the setting in the following passage:
+            scene_number = i + 1
+            scene_path = os.path.join(self.scene_directory, f"{scene_number}.txt")
+            image_path = os.path.join(self.image_directory, f"{scene_number}.png")
+            overwrite = specific_chunk == scene_number
+            if overwrite or not (os.path.exists(scene_path) and os.path.exists(image_path)):
+                if os.path.exists(scene_path) and not overwrite:
+                    with open(scene_path, "r", encoding="utf-8") as file:
+                        description = file.read()
+                    descriptions.append((scene_number, description))
+                    print(f"Using existing description for scene {scene_number}.")
+                else:
+                    description = generator.generate(self.create_query_prompt(chunk))
+                    descriptions.append((scene_number, description))
+                    self.write_scene(description, scene_number, overwrite)
+            else:
+                print(f"Skipping generation for scene {scene_number}, both files already exist.")
 
-                {chunk}
-                """
-            )
-            scene_query_chain = (
-                scene_query_prompt
-                | ChatOpenAI(model_name="gpt-3.5-turbo")
-                | StrOutputParser()
-            )
-            output_stream = scene_query_chain.stream({"chunk": chunk})
-            self.write_scene(output_stream, i+1)
+        # Unload the text generator so the image generator can fit on the GPU
+        # TODO: Manage the loading/unloading of models more intuitively
+        generator.unload()
+        self.image_generator = StableDiffusionGenerator()
+        # Process each scene for which description was generated
+        for scene_number, description in descriptions:
+            overwrite = specific_chunk == scene_number
+            self.generate_image(description, scene_number, overwrite)
+
+    @staticmethod
+    def create_query_prompt(chunk):
+        """
+        Creates a standardized query prompt from a text chunk for scene description.
+        """
+        return (
+            f"Write a one-sentence description of an interesting visual composition of the passage below. Make the most important subject the first thing you mention. Be concise."
+            f"Write only your concise one-sentence description in response:\n\n{chunk}"
+        )
 
 if __name__ == "__main__":
-    graphic_novelator = GraphicNovel()
-    graphic_novelator.build()
+    # Determine if a specific scene number has been provided as a command-line argument
+    chunk_number = int(sys.argv[1]) if len(sys.argv) > 1 else None
+    novel = GraphicNovel("text.txt")
+    novel.build(chunk_number)
 
