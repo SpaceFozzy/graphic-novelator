@@ -22,5 +22,5 @@ Right now the plan is to:
 `A lone explorer stands at the edge of a frozen lake, the aurora borealis dancing across the dark sky behind him, as the icy landscape stretches out to the horizon, with the faint outline of a ship in the distance.`
 
 ## Image
-Not sure why he's drifting on an iceberg but its a start :stuck_out_tongue: 
+Not sure why he's drifting on an iceberg but its a start 😛
 ![1](https://github.com/SpaceFozzy/graphic-novelator/assets/10606414/44b10ee9-2382-4188-8897-572d27547d9f)
