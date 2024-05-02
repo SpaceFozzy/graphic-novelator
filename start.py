@@ -2,6 +2,7 @@ import os
 import sys
 from llama.llama import LLama3Generator
 from stable_diffusion.stable_diffusion import StableDiffusionGenerator
+from html_builder.html_builder import generate_chunk_html, generate_index_html
 
 def chunk_text(text, chunk_size=500):
     """
@@ -14,8 +15,10 @@ def chunk_text(text, chunk_size=500):
 class GraphicNovel:
     def __init__(self, filename):
         self.filename = filename
-        self.scene_directory = "./scenes"
-        self.image_directory = "./images"
+        self.root_directory = "./example"
+        self.scene_directory = "./example/scenes"
+        self.pages_directory = "./example/pages"
+        self.image_directory = "./example/images"
         os.makedirs(self.scene_directory, exist_ok=True)
         os.makedirs(self.image_directory, exist_ok=True)
 
@@ -52,7 +55,6 @@ class GraphicNovel:
         """
         text = self.read_file()
         generator = LLama3Generator()
-
         # Check if files exist and determine if generation is needed
         descriptions = []
         for i, chunk in enumerate(chunk_text(text)):
@@ -82,6 +84,20 @@ class GraphicNovel:
             overwrite = specific_chunk == scene_number
             self.generate_image(description, scene_number, overwrite)
 
+        os.makedirs(self.pages_directory, exist_ok=True)
+        for i, chunk in enumerate(chunk_text(text)):
+            html = generate_chunk_html(chunk, i + 1, len(list(chunk_text(text))))
+            file_path = os.path.join(self.pages_directory, f"{i + 1}.html")
+            with open(file_path, "w", encoding="utf-8") as file:
+                file.write(html)
+            print(f"HTML for chunk {i + 1} written to {file_path}")
+
+        html = generate_index_html(len(list(chunk_text(text))))
+        file_path = os.path.join(self.root_directory, f"index.html")
+        with open(file_path, "w", encoding="utf-8") as file:
+                file.write(html)
+        print(f"HTML index written to {file_path}")
+
     @staticmethod
     def create_query_prompt(chunk):
         """
@@ -95,6 +111,6 @@ class GraphicNovel:
 if __name__ == "__main__":
     # Determine if a specific scene number has been provided as a command-line argument
     chunk_number = int(sys.argv[1]) if len(sys.argv) > 1 else None
-    novel = GraphicNovel("text.txt")
+    novel = GraphicNovel("./example/text.txt")
     novel.build(chunk_number)
 
