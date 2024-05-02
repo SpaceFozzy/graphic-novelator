@@ -25,19 +25,19 @@ class StableDiffusionGenerator:
         self.refiner.enable_model_cpu_offload()
 
     def generate_image(self, prompt, name):
-        augmented_prompt = f"In a colorful hand-drown comic horror style: {prompt}"
+        augmented_prompt = f"In a sinister, inky, but colorful horror comic style: {prompt}"
         negative_prompt = f"lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, speech bubbles, comic frames, words, titles"
         base_generation = self.base(
             prompt=augmented_prompt,
             negative_prompt=negative_prompt,
-            denoising_end=0.75,
+            denoising_end=0.80,
             output_type="latent",
         ).images
         generation = self.refiner(
             prompt=prompt,
             image=base_generation,
             num_inference_steps=40,
-            denoising_start=0.75,
+            denoising_start=0.80,
         ).images[0]
         generation.save(f"./images/{name}.png")
         return generation
