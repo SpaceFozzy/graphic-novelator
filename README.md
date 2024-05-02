@@ -21,7 +21,7 @@ Next steps:
 ### Full Stories
 [H.P. Lovecraft's The Colour Out of Space](https://spacefozzy.github.io/graphic-novelator/example/index.html)
 
-### Single Scene (Mary Shelly's Frankenstein)
+### Single Scene (Mary Shelley's Frankenstein)
 
 #### Scene Description
 `A lone explorer stands at the edge of a frozen lake, the aurora borealis dancing across the dark sky behind him, as the icy landscape stretches out to the horizon, with the faint outline of a ship in the distance.`
