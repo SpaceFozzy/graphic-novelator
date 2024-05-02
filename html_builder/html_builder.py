@@ -12,7 +12,7 @@ def generate_index_html(total_chunks):
     html += f"<p>Built with <a href='https://github.com/SpaceFozzy/graphic-novelator'>graphic-novelator<a></p>"
     html += "<ul>"
     for i in range(1, total_chunks + 1):
-        html += f"<li><a href='{i}.html'>Scene {i}</a></li>"
+        html += f"<li><a href='pages/{i}.html'>Scene {i}</a></li>"
     html += "</ul>"
     html += "</body>"
     html += "</html>"
