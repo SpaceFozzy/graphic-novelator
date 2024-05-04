@@ -4,7 +4,7 @@ from llama.llama import LLama3Generator
 from stable_diffusion.stable_diffusion import StableDiffusionGenerator
 from html_builder.html_builder import generate_chunk_html, generate_index_html
 
-def chunk_text(text, chunk_size=500):
+def chunk_text(text, chunk_size=100):
     """
     Yields chunks of text of approximately `chunk_size` words.
     """
