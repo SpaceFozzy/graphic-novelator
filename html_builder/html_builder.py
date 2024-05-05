@@ -31,7 +31,7 @@ def generate_chunks_html(chunks):
         body {
             background-color: black;
             color: white;
-            font-size: 24px; /* Increased text size for better readability */
+            font-size: 48px; /* Increased text size for better readability */
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -42,7 +42,7 @@ def generate_chunks_html(chunks):
             margin: 0 auto;
         }
         .content-container {
-            max-width: 650px; /* Typical blog width */
+            max-width: 800px; /* Typical blog width */
             margin: 0 auto;
             padding: 20px;
         }
@@ -50,16 +50,27 @@ def generate_chunks_html(chunks):
             font-family: 'Bangers', sans-serif;
             text-decoration: none;
             color: white;
-            display: block;
-            margin: 20px;
-            font-size: 36px; /* Larger font size for mobile touch */
+            font-size: 72px; /* Larger font size for mobile touch */
             padding: 10px; /* Added padding for easier touch */
+            display: block;
+            margin: 20px auto; /* Centered horizontally */
+            text-align: center;
         }
         .back {
             text-align: left;
         }
         .next {
             text-align: right;
+        }
+
+        /* Media Query for Desktop Screens */
+        @media (min-width: 1024px) {
+            body {
+                font-size: 24px; /* Half size on desktop */
+            }
+            .navigation {
+                font-size: 36px; /* Half size on desktop */
+            }
         }
     </style>
     <link href="https://fonts.googleapis.com/css?family=Bangers&display=swap" rel="stylesheet">
@@ -68,25 +79,24 @@ def generate_chunks_html(chunks):
         """
 
         chunks_per_page = 5
-        # Display current chunk and up to the next four chunks
         limit = min(i + chunks_per_page, total_chunks)  # Ensuring we do not go out of bounds
 
         # Back navigation button
-        if i > chunks_per_page:
-            html += f"<div class='content-container'><a href='{i-chunks_per_page-1}.html' class='navigation back'>Back</a></div>"
-        else: 
-            if i > 0:
-                html += f"<div class='content-container'><a href='1.html' class='navigation back'>Back</a></div>"
+        if i > 0:
+            prev_page = max(i - chunks_per_page, 0)
+            html += f"<div class='content-container'><a href='chunk{prev_page}.html' class='navigation back'>Back</a></div>"
 
         for j in range(i, limit):
-            html += f"<img src='../images/{j+1}.png'>"
+            html += f"<img src='../images/{j + 1}.png'>"
             html += f"<div class='content-container'><p>{chunks[j]}</p></div>"
 
         # Next navigation button
         if i < total_chunks - chunks_per_page:
-            html += f"<div class='content-container'><a href='{i+chunks_per_page+1}.html' class='navigation next'>Next</a>"
+            next_page = i + chunks_per_page
+            html += f"<div class='content-container'><a href='chunk{next_page}.html' class='navigation next'>Next</a></div>"
 
         html += "</body></html>"
         html_pages.append(html)
 
     return html_pages
+
