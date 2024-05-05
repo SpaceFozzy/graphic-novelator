@@ -4,7 +4,7 @@ This project takes the text of a story and tries to use generative AI to build a
 experience of it.
 
 Next steps:
-1. Add some styling to the pages
+1. ✅ Add some styling to the pages
 2. Allow generating a story in another location
 3. Get dependencies under control (use a virtual environment or add containerization)
 4. Clean up the code
@@ -13,13 +13,13 @@ Next steps:
 
 1. `pip install diffusers transformers`
 2. Delete everything in `./example` and add your story as `example/text.txt`
-3. `TITLE="Your Title" AUTHOR="Author" python3 start.py` will start generating scene descriptions, images, and html pages for the whole story, with one image per 500 word chunk of text
+3. `TITLE="Your Title" AUTHOR="Author" python3 start.py` will start generating scene descriptions, images, and html pages for the whole story, with one image per 100 word chunk of text
 4. `TITLE="Your Title" AUTHOR="Author" python3 start.py 17` will regenerate the scene description and image for the 17th chunk
 
 ## Examples
 
 ### Full Stories
-[H.P. Lovecraft's The Colour Out of Space](https://spacefozzy.github.io/graphic-novelator/example/index.html)
+[H.P. Lovecraft's The Colour Out of Space](https://spacefozzy.github.io/graphic-novelator/example/pages/1.html)
 
 ### Single Scene (Mary Shelley's Frankenstein)
 
