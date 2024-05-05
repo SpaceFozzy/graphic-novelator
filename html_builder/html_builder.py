@@ -1,5 +1,6 @@
 import os
 
+
 def generate_index_html(total_chunks):
     title = os.getenv("TITLE", "Unknown Story")
     author = os.getenv("AUTHOR", "Unknown Author")
@@ -40,7 +41,7 @@ def generate_chunks_html(chunks):
             max-width: 100%;
             margin: 0 auto;
         }
-        .text-container {
+        .content-container {
             max-width: 650px; /* Typical blog width */
             margin: 0 auto;
             padding: 20px;
@@ -72,21 +73,20 @@ def generate_chunks_html(chunks):
 
         # Back navigation button
         if i > chunks_per_page:
-            html += f"<a href='{i-chunks_per_page-1}.html' class='navigation back'>Back</a>"
+            html += f"<div class='content-container'><a href='{i-chunks_per_page-1}.html' class='navigation back'>Back</a></div>"
         else: 
             if i > 0:
-                html += f"<a href='1.html' class='navigation back'>Back</a>"
+                html += f"<div class='content-container'><a href='1.html' class='navigation back'>Back</a></div>"
 
         for j in range(i, limit):
             html += f"<img src='../images/{j+1}.png'>"
-            html += f"<div class='text-container'><p>{chunks[j]}</p></div>"
+            html += f"<div class='content-container'><p>{chunks[j]}</p></div>"
 
         # Next navigation button
         if i < total_chunks - chunks_per_page:
-            html += f"<a href='{i+chunks_per_page+1}.html' class='navigation next'>Next</a>"
+            html += f"<div class='content-container'><a href='{i+chunks_per_page+1}.html' class='navigation next'>Next</a>"
 
         html += "</body></html>"
         html_pages.append(html)
 
     return html_pages
-
