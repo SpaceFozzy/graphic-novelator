@@ -77,23 +77,25 @@ def generate_chunks_html(chunks):
 </head>
 <body>
         """
-
+        
         chunks_per_page = 5
+        # Display current chunk and up to the next four chunks
         limit = min(i + chunks_per_page, total_chunks)  # Ensuring we do not go out of bounds
 
         # Back navigation button
-        if i > 0:
-            prev_page = max(i - chunks_per_page, 0)
-            html += f"<div class='content-container'><a href='{prev_page}.html' class='navigation back'>Back</a></div>"
+        if i > chunks_per_page:
+            html += f"<div class='content-container'><a href='{i-chunks_per_page+1}.html' class='navigation back'>Back</a></div>"
+        else: 
+            if i > 0:
+                html += f"<div class='content-container'><a href='1.html' class='navigation back'>Back</a></div>"
 
         for j in range(i, limit):
-            html += f"<img src='../images/{j + 1}.png'>"
+            html += f"<img src='../images/{j+1}.png'>"
             html += f"<div class='content-container'><p>{chunks[j]}</p></div>"
 
         # Next navigation button
         if i < total_chunks - chunks_per_page:
-            next_page = i + chunks_per_page
-            html += f"<div class='content-container'><a href='{next_page}.html' class='navigation next'>Next</a></div>"
+            html += f"<div class='content-container'><a href='{i+chunks_per_page+1}.html' class='navigation next'>Next</a>"
 
         html += "</body></html>"
         html_pages.append(html)
