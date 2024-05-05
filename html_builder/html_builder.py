@@ -1,8 +1,9 @@
 import os
 
+
 def generate_index_html(total_chunks):
-    title = os.getenv('TITLE', 'Unknown Story')
-    author = os.getenv('AUTHOR', 'Unknown Author')
+    title = os.getenv("TITLE", "Unknown Story")
+    author = os.getenv("AUTHOR", "Unknown Author")
 
     html = "<html>"
     html += f"<head><title>{title}</title></head>"
@@ -18,14 +19,74 @@ def generate_index_html(total_chunks):
     html += "</html>"
     return html
 
-def generate_chunk_html(chunk, scene_number, total_chunks):
-    html = "<html>"
-    html += f"<img src='../images/{scene_number}.png'>"
-    if scene_number != 1:
-        html += f"<a href='{scene_number - 1}.html'>Previous</a>"
-    if scene_number != total_chunks:
-        html += f"<a href='{scene_number + 1}.html'>Next</a>"
-    html += f"<div><h1>Scene {scene_number}</h1><p>{chunk}</p></div>"
-    html += "</html>"
-    return html
+def generate_chunks_html(chunks):
+    total_chunks = len(chunks)
+    html_pages = []
 
+    for i in range(total_chunks):
+        html = """
+<html>
+<head>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-size: 24px; /* Increased text size for better readability */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        .content-container {
+            max-width: 650px; /* Typical blog width */
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .navigation {
+            font-family: 'Bangers', sans-serif;
+            text-decoration: none;
+            color: white;
+            display: block;
+            margin: 20px;
+            font-size: 36px; /* Larger font size for mobile touch */
+            padding: 10px; /* Added padding for easier touch */
+        }
+        .back {
+            text-align: left;
+        }
+        .next {
+            text-align: right;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Bangers&display=swap" rel="stylesheet">
+</head>
+<body>
+        """
+
+        chunks_per_page = 5
+        # Display current chunk and up to the next four chunks
+        limit = min(i + chunks_per_page, total_chunks)  # Ensuring we do not go out of bounds
+
+        # Back navigation button
+        if i > chunks_per_page:
+            html += f"<div class='content-container'><a href='{i-chunks_per_page-1}.html' class='navigation back'>Back</a></div>"
+        else: 
+            if i > 0:
+                html += f"<div class='content-container'><a href='1.html' class='navigation back'>Back</a></div>"
+
+        for j in range(i, limit):
+            html += f"<img src='../images/{j+1}.png'>"
+            html += f"<div class='content-container'><p>{chunks[j]}</p></div>"
+
+        # Next navigation button
+        if i < total_chunks - chunks_per_page:
+            html += f"<div class='content-container'><a href='{i+chunks_per_page+1}.html' class='navigation next'>Next</a>"
+
+        html += "</body></html>"
+        html_pages.append(html)
+
+    return html_pages
