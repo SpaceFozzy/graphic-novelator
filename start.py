@@ -2,7 +2,7 @@ import os
 import sys
 from llama.llama import LLama3Generator
 from stable_diffusion.stable_diffusion import StableDiffusionGenerator
-from html_builder.html_builder import generate_chunk_html, generate_index_html
+from html_builder.html_builder import generate_chunks_html, generate_index_html
 
 def chunk_text(text, chunk_size=100):
     """
@@ -85,8 +85,9 @@ class GraphicNovel:
             self.generate_image(description, scene_number, overwrite)
 
         os.makedirs(self.pages_directory, exist_ok=True)
-        for i, chunk in enumerate(chunk_text(text)):
-            html = generate_chunk_html(chunk, i + 1, len(list(chunk_text(text))))
+
+        html_pages = generate_chunks_html(list(chunk_text(text)))
+        for i, html in enumerate( html_pages ):
             file_path = os.path.join(self.pages_directory, f"{i + 1}.html")
             with open(file_path, "w", encoding="utf-8") as file:
                 file.write(html)
