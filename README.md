@@ -21,7 +21,8 @@ Next steps:
 ## Examples
 
 ### Full Stories
-[H.P. Lovecraft's The Colour Out of Space](https://spacefozzy.github.io/graphic-novelator/example/pages/1.html)
+* [H.P. Lovecraft's "The Colour Out of Space"](https://spacefozzy.github.io/graphic-novelator/example/pages/1.html)
+* [H.P. Lovecraft's "The Festival"](https://spacefozzy.github.io/the-festival-illustrated/pages/1.html)
 
 ### Single Scene (Mary Shelley's Frankenstein)
 
