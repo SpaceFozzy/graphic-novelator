@@ -2,6 +2,7 @@ from PIL import Image
 from diffusers import DiffusionPipeline
 import torch
 
+import os
 
 class StableDiffusionGenerator:
     def __init__(self):
@@ -39,5 +40,6 @@ class StableDiffusionGenerator:
             num_inference_steps=40,
             denoising_start=0.80,
         ).images[0]
-        generation.save(f"./example/images/{name}.png")
+        story_directory = os.getenv("STORY_DIR", "./example")
+        generation.save(f"{story_directory}/images/{name}.png")
         return generation

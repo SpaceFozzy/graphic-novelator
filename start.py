@@ -15,10 +15,11 @@ def chunk_text(text, chunk_size=100):
 class GraphicNovel:
     def __init__(self, filename):
         self.filename = filename
-        self.root_directory = "./example"
-        self.scene_directory = "./example/scenes"
-        self.pages_directory = "./example/pages"
-        self.image_directory = "./example/images"
+        story_directory = os.getenv("STORY_DIR", "./example")
+        self.root_directory = f"{story_directory}"
+        self.scene_directory = f"{story_directory}/scenes"
+        self.pages_directory = f"{story_directory}/pages"
+        self.image_directory = f"{story_directory}/images"
         os.makedirs(self.scene_directory, exist_ok=True)
         os.makedirs(self.image_directory, exist_ok=True)
 
@@ -111,7 +112,8 @@ class GraphicNovel:
 
 if __name__ == "__main__":
     # Determine if a specific scene number has been provided as a command-line argument
+    story_directory = os.getenv("STORY_DIR", "./example")
     chunk_number = int(sys.argv[1]) if len(sys.argv) > 1 else None
-    novel = GraphicNovel("./example/text.txt")
+    novel = GraphicNovel(f"{story_directory}/text.txt")
     novel.build(chunk_number)
 
