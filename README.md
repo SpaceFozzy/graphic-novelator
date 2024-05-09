@@ -5,18 +5,24 @@ experience of it.
 
 Next steps:
 1. ✅ Add some styling to the pages
-2. Allow generating a story in another location
+2. ✅ Allow generating a story in another location
 3. ✅ Get dependencies under control (use a virtual environment)
 4. Clean up the code
 
 ## Creating Your Own Story
+Before you begin, make a new empty directory somewhere for your project. Place the raw text of story in your project folder as `text.txt`
 
-1. Start a virtual environment: `python -m venv .env`
+1. In the graphic-novelator directory, start a virtual environment: `python -m venv .env`
 2. Activate your virtual environment: `source .env/bin/activate` (`deactivate` to deactivate it)
 3. Install the dependencies: `pip install -r requirements.txt`
-4. Delete everything in `./example` and add your story as `example/text.txt`
-5. `TITLE="Your Title" AUTHOR="Author" python3 start.py` will start generating scene descriptions, images, and html pages for the whole story, with one image per 100 word chunk of text
-6. `TITLE="Your Title" AUTHOR="Author" python3 start.py 17` will regenerate the scene description and image for the 17th chunk
+4. `TITLE="Your Title" AUTHOR="Author" STORY_DIR="../my-story" python3 start.py` will start generating scene descriptions, images, and html pages for the whole story, with one image per 100 word chunk of text
+5. `TITLE="Your Title" AUTHOR="Author" STORY_DIR="../my-story" python3 start.py 17` will regenerate the scene description and image for the 17th chunk
+
+## Requirements
+1. Python
+2. A CUDA-enabled GPU (or a lot of patience)
+3. Access to the [Llama 3 8b Instruct model via HuggingFace](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct) (it's a "gated model" so you must request access) or the willingness to switch the text-to-text model.
+4. A text file of your story (if you want to generate a new one)
 
 ## Examples
 
