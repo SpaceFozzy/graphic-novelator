@@ -1,7 +1,7 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 import torch
 
-class LLama3Generator:
+class TextToTextGenerator:
     def __init__(self):
         model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
         self.model = AutoModelForCausalLM.from_pretrained(model_id, load_in_4bit=True, torch_dtype=torch.bfloat16, device_map="auto")
