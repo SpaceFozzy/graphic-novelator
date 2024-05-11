@@ -12,11 +12,11 @@ Next steps:
 ## Creating Your Own Story
 Before you begin, make a new empty directory somewhere for your project. Place the raw text of story in your project folder as `text.txt`
 
-1. In the graphic-novelator directory, start a virtual environment: `python -m venv .env`
+1. In the graphic-novelator directory, start a virtual environment: `python3 -m venv .env`
 2. Activate your virtual environment: `source .env/bin/activate` (`deactivate` to deactivate it)
 3. Install the dependencies: `pip install -r requirements.txt`
-4. `TITLE="Your Title" AUTHOR="Author" STORY_DIR="../my-story" python3 start.py` will start generating scene descriptions, images, and html pages for the whole story, with one image per 100 word chunk of text
-5. `TITLE="Your Title" AUTHOR="Author" STORY_DIR="../my-story" python3 start.py 17` will regenerate the scene description and image for the 17th chunk
+4. `TITLE="Your Title" AUTHOR="Author" STORY_DIR="../my-story" python3 app/start.py` will start generating scene descriptions, images, and html pages for the whole story, with one image per 100 word chunk of text
+5. `TITLE="Your Title" AUTHOR="Author" STORY_DIR="../my-story" python3 app/start.py 17` will regenerate the scene description and image for the 17th chunk
 
 ## Requirements
 1. Python
