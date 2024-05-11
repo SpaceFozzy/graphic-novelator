@@ -1,7 +1,7 @@
 import os
 import sys
-from llama.llama import LLama3Generator
-from stable_diffusion.stable_diffusion import StableDiffusionGenerator
+from generative_models.text_to_text import TextToTextGenerator
+from generative_models.text_to_image import TextToImageGenerator
 from html_builder.html_builder import generate_chunks_html, generate_index_html
 
 def chunk_text(text, chunk_size=100):
@@ -55,7 +55,7 @@ class GraphicNovel:
         Skips generation if both scene description and image files exist unless overwriting is specified.
         """
         text = self.read_file()
-        generator = LLama3Generator()
+        generator = TextToTextGenerator()
         # Check if files exist and determine if generation is needed
         descriptions = []
         for i, chunk in enumerate(chunk_text(text)):
@@ -79,7 +79,7 @@ class GraphicNovel:
         # Unload the text generator so the image generator can fit on the GPU
         # TODO: Manage the loading/unloading of models more intuitively
         generator.unload()
-        self.image_generator = StableDiffusionGenerator()
+        self.image_generator = TextToImageGenerator()
         # Process each scene for which description was generated
         for scene_number, description in descriptions:
             overwrite = specific_chunk == scene_number

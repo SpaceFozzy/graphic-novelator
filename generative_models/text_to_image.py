@@ -4,7 +4,7 @@ import torch
 
 import os
 
-class StableDiffusionGenerator:
+class TextToImageGenerator:
     def __init__(self):
         self.model_id = "stabilityai/stable-diffusion-xl-base-1.0"
         self.base = DiffusionPipeline.from_pretrained(
