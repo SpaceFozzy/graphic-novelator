@@ -1,4 +1,3 @@
-from PIL import Image
 from diffusers import DiffusionPipeline
 import torch
 
@@ -25,7 +24,7 @@ class TextToImageGenerator:
         )
         self.refiner.enable_model_cpu_offload()
 
-    def generate_image(self, prompt, name):
+    def generate(self, prompt):
         augmented_prompt = f"In a sinister, inky, but colorful horror comic style: {prompt}"
         negative_prompt = f"lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, duplicate, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, speech bubbles, comic frames, words, titles"
         base_generation = self.base(
@@ -40,6 +39,4 @@ class TextToImageGenerator:
             num_inference_steps=40,
             denoising_start=0.80,
         ).images[0]
-        story_directory = os.getenv("STORY_DIR", "./example")
-        generation.save(f"{story_directory}/images/{name}.png")
         return generation
