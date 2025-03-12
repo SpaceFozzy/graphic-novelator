@@ -3,12 +3,6 @@
 This project takes the text of a story and tries to use generative AI to build a graphic novel
 experience of it.
 
-Next steps:
-1. ✅ Add some styling to the pages
-2. ✅ Allow generating a story in another location
-3. ✅ Get dependencies under control (use a virtual environment)
-4. Clean up the code
-
 ## Creating Your Own Story
 Before you begin, make a new empty directory somewhere for your project. Place the raw text of story in your project folder as `text.txt`
 
